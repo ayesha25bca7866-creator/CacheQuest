@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CacheScope - Cache Memory Simulator</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <h1>CacheScope</h1>
+        <p>Interactive Cache Memory & Mapping Simulator</p>
+        <p>Explore • Simulate • Analyze • Learn</p>
+    </header>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+
+            <a class="navbar-brand" href="#intro">CacheScope</a>
+
+            <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#cacheScopeNavbar"
+                aria-controls="cacheScopeNavbar"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="cacheScopeNavbar">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="#intro">Introduction</a>
+                    <a class="nav-link" href="#mapping">Mapping</a>
+                    <a class="nav-link" href="#hierarchy">Memory Hierarchy</a>
+                    <a class="nav-link" href="#simulator">Simulator</a>
+                    <a class="nav-link" href="#visualizer">Cache Animation</a>
+                    <a class="nav-link" href="#comparison">Comparison</a>
+                    <a class="nav-link" href="#performance">Performance</a>
+                    <a class="nav-link" href="#example">Worked Example</a>
+                    <a class="nav-link" href="#quiz">Quiz</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- INTRODUCTION -->
+    <section id="intro" class="container-fluid px-3 px-md-5 my-4">
+        <h2>What is Cache Memory?</h2>
+
+        <p>
+            Cache memory is a small and fast memory located close
+            to the processor. It stores frequently used data so
+            that the CPU can access it faster.
+        </p>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Fast Access</h3>
+                <p>Reduces memory access time.</p>
+            </div>
+
+            <div class="card">
+                <h3>Better Performance</h3>
+                <p>Improves CPU performance.</p>
+            </div>
+
+            <div class="card">
+                <h3>Temporary Storage</h3>
+                <p>Stores frequently accessed data.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAPPING TECHNIQUES -->
+    <section id="mapping" class="container-fluid px-3 px-md-5 my-4">
+        <h2>Cache Mapping Techniques</h2>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Direct Mapping</h3>
+                <p>Each memory block maps to one fixed cache line.</p>
+            </div>
+
+            <div class="card">
+                <h3>Fully Associative</h3>
+                <p>A memory block can be placed in any cache line.</p>
+            </div>
+
+            <div class="card">
+                <h3>Set Associative</h3>
+                <p>
+                    A memory block maps to a set and can occupy
+                    any line in that set.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MEMORY HIERARCHY -->
+    <section id="hierarchy" class="container-fluid px-3 px-md-5 my-4">
+        <h2>Memory Hierarchy</h2>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Registers</h3>
+                <p>Fastest storage inside the CPU.</p>
+            </div>
+
+            <div class="card">
+                <h3>Cache Memory</h3>
+                <p>Stores frequently used data.</p>
+            </div>
+
+            <div class="card">
+                <h3>Main Memory (RAM)</h3>
+                <p>Stores currently running programs and data.</p>
+            </div>
+
+            <div class="card">
+                <h3>Secondary Storage</h3>
+                <p>Stores data for long-term use.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CACHE SIMULATOR -->
+    <section id="simulator" class="container-fluid px-3 px-md-5 my-4">
+        <h2>Cache Simulator</h2>
+
+        <label for="mappingType">Mapping Technique:</label>
+
+        <select id="mappingType">
+            <option value="direct">Direct Mapping</option>
+            <option value="associative">Fully Associative</option>
+            <option value="set">2-Way Set Associative</option>
+        </select>
+
+        <br><br>
+
+        <label for="replacementPolicy">
+            <b>Replacement Policy:</b>
+        </label>
+
+        <select id="replacementPolicy">
+            <option value="fifo">FIFO (First In, First Out)</option>
+            <option value="lru">LRU (Least Recently Used)</option>
+        </select>
+
+        <br><br>
+
+        <label for="blocks">Memory Blocks (comma separated):</label>
+
+        <input
+            id="blocks"
+            type="text"
+            value="0, 4, 8, 0"
+            placeholder="Example: 0, 4, 8, 0">
+
+        <button onclick="runSimulation()">Run Simulation</button>
+
+        <div id="results"></div>
+    </section>
+
+    <!-- CACHE VISUALIZATION -->
+    <section id="visualizer" class="container-fluid px-3 px-md-5 my-4">
+        <h2>Live Cache Visualization</h2>
+
+        <p>
+            Watch how memory blocks enter cache lines during simulation.
+        </p>
+
+        <div id="cacheVisual" class="cards">
+            <div class="card cache-line">
+                <h3>Cache Line 0</h3>
+                <p>Empty</p>
+            </div>
+
+            <div class="card cache-line">
+                <h3>Cache Line 1</h3>
+                <p>Empty</p>
+            </div>
+
+            <div class="card cache-line">
+                <h3>Cache Line 2</h3>
+                <p>Empty</p>
+            </div>
+
+            <div class="card cache-line">
+                <h3>Cache Line 3</h3>
+                <p>Empty</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAPPING COMPARISON -->
+    <section id="comparison" class="container-fluid px-3 px-md-5 my-4">
+        <h2>Mapping Technique Comparison</h2>
+
+        <p>
+            Compare the performance of different cache mapping techniques
+            using the same memory block sequence.
+        </p>
+
+        <button id="compareButton" onclick="compareMappings()">
+            Compare Techniques
+        </button>
+
+        <div id="comparisonResults"></div>
+    </section>
+
+    <!-- PERFORMANCE CHART -->
+    <section id="performance" class="container-fluid px-3 px-md-5 my-4">
+        <h2>Cache Performance Analysis</h2>
+
+        <p>
+            Visualize cache hits and misses through performance charts.
+        </p>
+
+        <div class="card">
+            <canvas id="performanceChart"></canvas>
+        </div>
+    </section>
+
+    <!-- WORKED EXAMPLE -->
+    <section id="example" class="container-fluid px-3 px-md-5 my-4">
+        <h2>Worked Example – Direct Mapping</h2>
+
+        <p>Assume the cache contains 4 cache lines.</p>
+        <p>Memory blocks: 0, 4, 8</p>
+
+        <p>
+            <b>Formula:</b>
+            Cache Line = Block Number % Number of Cache Lines
+        </p>
+
+        <table>
+            <tr>
+                <th>Memory Block</th>
+                <th>Calculation</th>
+                <th>Cache Line</th>
+            </tr>
+
+            <tr>
+                <td>0</td>
+                <td>0 % 4</td>
+                <td>0</td>
+            </tr>
+
+            <tr>
+                <td>4</td>
+                <td>4 % 4</td>
+                <td>0</td>
+            </tr>
+
+            <tr>
+                <td>8</td>
+                <td>8 % 4</td>
+                <td>0</td>
+            </tr>
+        </table>
+
+        <p>
+            <b>Observation:</b>
+            All three memory blocks map to cache line 0.
+            Therefore, they replace one another when accessed in sequence.
+        </p>
+    </section>
+
+    <!-- QUICK QUIZ -->
+    <section id="quiz" class="container-fluid px-3 px-md-5 my-4">
+        <h2>Quick Quiz</h2>
+
+        <p>
+            Which mapping allows a block to occupy any cache line?
+        </p>
+
+        <button onclick="checkAnswer('wrong')">Direct Mapping</button>
+
+        <button onclick="checkAnswer('correct')">Fully Associative</button>
+
+        <p id="quizResult"></p>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>CacheScope | ECE 2002 - Module 5</p>
+        <p>Interactive Cache Memory & Mapping Simulator</p>
+    </footer>
+
+    <!-- BOOTSTRAP JAVASCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- MAIN JAVASCRIPT -->
+    <script src="script.js"></script>
+
+</body>
+</html>
