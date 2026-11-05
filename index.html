@@ -1,315 +1,563 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>CacheScope - Cache Memory Simulator</title>
+    <title>CacheQuest - Escape the Memory Maze</title>
 
-    <!-- Bootstrap CSS -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        rel="stylesheet">
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
-    <!-- HEADER -->
-    <header>
-        <h1>CacheScope</h1>
-        <p>Interactive Cache Memory & Mapping Simulator</p>
-        <p>Explore • Simulate • Analyze • Learn</p>
+    <!-- TOP NAVIGATION -->
+    <header class="topbar">
+        <div class="logo">CACHE<span>QUEST</span></div>
+        <div class="status">MEMORY SYSTEM ONLINE</div>
     </header>
 
-    <!-- NAVIGATION -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
+    <main>
 
-            <a class="navbar-brand" href="#intro">CacheScope</a>
+        <!-- HOME SCREEN -->
+        <section id="home" class="screen active">
 
-            <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#cacheScopeNavbar"
-                aria-controls="cacheScopeNavbar"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
+            <p class="eyebrow">
+                INTERACTIVE CACHE MEMORY EXPERIENCE
+            </p>
 
-                <span class="navbar-toggler-icon"></span>
+            <h1>
+                ESCAPE THE<br>
+                <span>MEMORY MAZE</span>
+            </h1>
+
+            <p class="intro">
+                Learn the architecture.
+                Simulate the system.
+                Master the challenge.
+            </p>
+
+            <input
+                type="text"
+                id="playerName"
+                placeholder="Enter your player name"
+            >
+
+            <button id="startButton">
+                INITIALIZE QUEST
             </button>
 
-            <div class="collapse navbar-collapse" id="cacheScopeNavbar">
-                <div class="navbar-nav ms-auto">
-                    <a class="nav-link" href="#intro">Introduction</a>
-                    <a class="nav-link" href="#mapping">Mapping</a>
-                    <a class="nav-link" href="#hierarchy">Memory Hierarchy</a>
-                    <a class="nav-link" href="#simulator">Simulator</a>
-                    <a class="nav-link" href="#visualizer">Cache Animation</a>
-                    <a class="nav-link" href="#comparison">Comparison</a>
-                    <a class="nav-link" href="#performance">Performance</a>
-                    <a class="nav-link" href="#example">Worked Example</a>
-                    <a class="nav-link" href="#quiz">Quiz</a>
+        </section>
+
+
+        <!-- MISSION DASHBOARD -->
+        <section id="dashboard" class="screen">
+
+            <div class="dashboard-header">
+                <div>
+                    <p class="eyebrow">SYSTEM COMMAND CENTER</p>
+                    <h2>MISSION CONTROL</h2>
+                    <p id="dashboardWelcome"></p>
+                </div>
+
+                <div class="player-level">
+                    <span>PLAYER RANK</span>
+                    <h3>ROOKIE</h3>
                 </div>
             </div>
-        </div>
-    </nav>
 
-    <!-- INTRODUCTION -->
-    <section id="intro" class="container-fluid px-3 px-md-5 my-4">
-        <h2>What is Cache Memory?</h2>
+            <div class="stats-container">
 
-        <p>
-            Cache memory is a small and fast memory located close
-            to the processor. It stores frequently used data so
-            that the CPU can access it faster.
-        </p>
+                <div class="stat-card">
+                    <span>MISSIONS COMPLETED</span>
+                    <h2 id="completedCount">0 / 5</h2>
+                </div>
 
-        <div class="cards">
-            <div class="card">
-                <h3>Fast Access</h3>
-                <p>Reduces memory access time.</p>
+                <div class="stat-card">
+                    <span>TOTAL SCORE</span>
+                    <h2 id="totalScore">0 XP</h2>
+                </div>
+
+                <div class="stat-card">
+                    <span>MASTERY</span>
+                    <h2 id="mastery">0%</h2>
+                </div>
+
             </div>
 
-            <div class="card">
-                <h3>Better Performance</h3>
-                <p>Improves CPU performance.</p>
+            <h3 class="section-heading">AVAILABLE OPERATIONS</h3>
+
+            <div id="missionList" class="mission-grid"></div>
+
+            <div class="dashboard-actions">
+
+    <button class="dashboard-btn" onclick="showScreen('learning')">
+        LEARNING CENTER
+    </button>
+
+    <button class="dashboard-btn" onclick="showScreen('simulator')">
+        SIMULATION LAB
+    </button>
+
+    <button class="dashboard-btn" onclick="startChallenge()">
+        CHALLENGE ARENA
+    </button>
+
+    <button class="dashboard-btn" onclick="openAdventureWorld()">
+        ENTER ADVENTURE WORLD
+    </button>
+
+</div>
+
+        </section>
+
+
+        <!-- LEARNING CENTER -->
+        <section id="learning" class="screen">
+
+            <p class="eyebrow">KNOWLEDGE DATABASE</p>
+            <h2>LEARNING CENTER</h2>
+
+            <p class="intro">
+                Understand the memory system before entering the simulation.
+            </p>
+
+            <div class="learning-layout">
+
+                <aside class="topic-menu">
+                    <button onclick="loadLesson(0)">01. Memory Hierarchy</button>
+                    <button onclick="loadLesson(1)">02. Cache Basics</button>
+                    <button onclick="loadLesson(2)">03. Cache Hits & Misses</button>
+                    <button onclick="loadLesson(3)">04. Locality of Reference</button>
+                </aside>
+
+                <div id="learningContent" class="lesson-panel">
+                    <h3>Welcome to the Learning Center</h3>
+                    <p>Select a topic to begin learning.</p>
+                </div>
+
             </div>
 
-            <div class="card">
-                <h3>Temporary Storage</h3>
-                <p>Stores frequently accessed data.</p>
+            <button onclick="showScreen('dashboard')">
+                BACK TO MISSION CONTROL
+            </button>
+
+        </section>
+
+
+        <!-- SIMULATION LAB -->
+        <section id="simulator" class="screen">
+
+            <p class="eyebrow">LIVE MEMORY EXPERIMENT</p>
+            <h2>CACHE SIMULATION LAB</h2>
+
+            <p class="intro">
+                Configure your cache and observe how memory blocks move through it.
+            </p>
+
+            <div class="simulator-controls">
+
+                <label for="mappingType">Mapping Technique</label>
+
+                <select id="mappingType">
+                    <option value="direct">Direct Mapping</option>
+                    <option value="associative">Fully Associative</option>
+                    <option value="set-associative">Set Associative</option>
+                </select>
+
+                <label for="cacheLines">Total Cache Lines</label>
+                <input type="number" id="cacheLines" value="4" min="1">
+
+                <label for="ways">Ways (Set Associative)</label>
+                <input type="number" id="ways" value="2" min="1">
+
+                <label for="replacementPolicy">Replacement Policy</label>
+
+                <select id="replacementPolicy">
+                    <option value="LRU">LRU</option>
+                    <option value="FIFO">FIFO</option>
+                </select>
+
+                <label for="blockInput">Memory Block Sequence</label>
+
+                <input
+                    type="text"
+                    id="blockInput"
+                    value="0, 1, 2, 3, 0, 4, 1, 2"
+                    placeholder="Example: 0, 1, 2, 3"
+                >
+
+                <button id="runSimulationButton">
+                    RUN SIMULATION
+                </button>
+
             </div>
-        </div>
-    </section>
 
-    <!-- MAPPING TECHNIQUES -->
-    <section id="mapping" class="container-fluid px-3 px-md-5 my-4">
-        <h2>Cache Mapping Techniques</h2>
+            <div id="simulationResults"></div>
 
-        <div class="cards">
-            <div class="card">
-                <h3>Direct Mapping</h3>
-                <p>Each memory block maps to one fixed cache line.</p>
-            </div>
 
-            <div class="card">
-                <h3>Fully Associative</h3>
-                <p>A memory block can be placed in any cache line.</p>
-            </div>
+            <!-- MAPPING COMPARISON -->
+            <div class="advanced-panel" id="mappingComparison">
 
-            <div class="card">
-                <h3>Set Associative</h3>
+                <h2>CACHE MAPPING COMPARISON</h2>
+
                 <p>
-                    A memory block maps to a set and can occupy
-                    any line in that set.
+                    Compare the performance of different mapping techniques.
                 </p>
-            </div>
-        </div>
-    </section>
 
-    <!-- MEMORY HIERARCHY -->
-    <section id="hierarchy" class="container-fluid px-3 px-md-5 my-4">
-        <h2>Memory Hierarchy</h2>
+                <button onclick="compareCacheMappings()">
+                    COMPARE MAPPING TECHNIQUES
+                </button>
 
-        <div class="cards">
-            <div class="card">
-                <h3>Registers</h3>
-                <p>Fastest storage inside the CPU.</p>
+                <div id="comparisonResults"></div>
+
             </div>
 
-            <div class="card">
-                <h3>Cache Memory</h3>
-                <p>Stores frequently used data.</p>
+
+            <!-- ANIMATED CACHE SIMULATOR -->
+            <div class="advanced-panel" id="animationPanel">
+
+                <p class="eyebrow">LIVE MEMORY VISUALIZATION</p>
+
+                <h2>ANIMATED CACHE SIMULATOR</h2>
+
+                <p>
+                    Watch memory blocks enter and leave cache step by step.
+                </p>
+
+                <div id="cacheAnimation"></div>
+
+
+                <!-- LIVE STATISTICS -->
+                <div class="live-statistics">
+
+                    <h3>LIVE CACHE STATISTICS</h3>
+
+                    <div class="statistics-grid">
+
+                        <div class="stat-box">
+                            <h4>Total Accesses</h4>
+                            <p id="liveAccess">0</p>
+                        </div>
+
+                        <div class="stat-box">
+                            <h4>Cache Hits</h4>
+                            <p id="liveHits">0</p>
+                        </div>
+
+                        <div class="stat-box">
+                            <h4>Cache Misses</h4>
+                            <p id="liveMisses">0</p>
+                        </div>
+
+                        <div class="stat-box">
+                            <h4>Hit Ratio</h4>
+                            <p id="liveHitRatio">0%</p>
+                        </div>
+
+                    </div>
+
+                    <h4>HIT / MISS PROGRESS</h4>
+
+                    <div class="statistics-bar">
+                        <div id="hitBar"></div>
+                        <div id="missBar"></div>
+                    </div>
+
+                </div>
+
+
+                <!-- MEMORY MOVEMENT -->
+                <div class="memory-movement">
+
+                    <h3>MAIN MEMORY</h3>
+
+                    <div id="mainMemoryBlocks" class="memory-blocks"></div>
+
+                    <div class="movement-arrow">
+                        ↓ MEMORY TRANSFER ↓
+                    </div>
+
+                    <h3>CACHE STORAGE</h3>
+
+                    <div id="cacheMovementBlocks" class="memory-blocks"></div>
+
+                </div>
+
             </div>
 
-            <div class="card">
-                <h3>Main Memory (RAM)</h3>
-                <p>Stores currently running programs and data.</p>
+
+            <!-- MEMORY ADDRESS DECODER -->
+            <div class="advanced-panel">
+
+                <p class="eyebrow">BINARY ADDRESS ANALYSIS</p>
+                <h2>MEMORY ADDRESS DECODER</h2>
+
+                <label for="addressInput">Byte Address (Decimal)</label>
+                <input type="number" id="addressInput" value="100">
+
+                <label for="addressBits">Address Width (Bits)</label>
+                <input type="number" id="addressBits" value="16">
+
+                <label for="blockSize">Block Size (Bytes)</label>
+                <input type="number" id="blockSize" value="4">
+
+                <button id="decodeAddressButton">
+                    DECODE ADDRESS
+                </button>
+
+                <div id="addressResults"></div>
+
             </div>
 
-            <div class="card">
-                <h3>Secondary Storage</h3>
-                <p>Stores data for long-term use.</p>
-            </div>
-        </div>
-    </section>
 
-    <!-- CACHE SIMULATOR -->
-    <section id="simulator" class="container-fluid px-3 px-md-5 my-4">
-        <h2>Cache Simulator</h2>
+            <!-- AMAT CALCULATOR -->
+            <div class="advanced-panel">
 
-        <label for="mappingType">Mapping Technique:</label>
+                <p class="eyebrow">SYSTEM PERFORMANCE ANALYSIS</p>
+                <h2>AMAT CALCULATOR</h2>
 
-        <select id="mappingType">
-            <option value="direct">Direct Mapping</option>
-            <option value="associative">Fully Associative</option>
-            <option value="set">2-Way Set Associative</option>
-        </select>
+                <p>
+                    Calculate performance using the miss ratio from your latest simulation.
+                </p>
 
-        <br><br>
+                <label for="hitTime">Cache Hit Time (ns)</label>
+                <input
+                    type="number"
+                    id="hitTime"
+                    value="2"
+                    min="0"
+                    step="any"
+                >
 
-        <label for="replacementPolicy">
-            <b>Replacement Policy:</b>
-        </label>
+                <label for="missPenalty">Additional Miss Penalty (ns)</label>
+                <input
+                    type="number"
+                    id="missPenalty"
+                    value="50"
+                    min="0"
+                    step="any"
+                >
 
-        <select id="replacementPolicy">
-            <option value="fifo">FIFO (First In, First Out)</option>
-            <option value="lru">LRU (Least Recently Used)</option>
-        </select>
+                <button id="calculateAMATButton">
+                    CALCULATE AMAT
+                </button>
 
-        <br><br>
+                <div id="amatResults"></div>
 
-        <label for="blocks">Memory Blocks (comma separated):</label>
-
-        <input
-            id="blocks"
-            type="text"
-            value="0, 4, 8, 0"
-            placeholder="Example: 0, 4, 8, 0">
-
-        <button onclick="runSimulation()">Run Simulation</button>
-
-        <div id="results"></div>
-    </section>
-
-    <!-- CACHE VISUALIZATION -->
-    <section id="visualizer" class="container-fluid px-3 px-md-5 my-4">
-        <h2>Live Cache Visualization</h2>
-
-        <p>
-            Watch how memory blocks enter cache lines during simulation.
-        </p>
-
-        <div id="cacheVisual" class="cards">
-            <div class="card cache-line">
-                <h3>Cache Line 0</h3>
-                <p>Empty</p>
             </div>
 
-            <div class="card cache-line">
-                <h3>Cache Line 1</h3>
-                <p>Empty</p>
+            <button onclick="showScreen('dashboard')">
+                BACK TO MISSION CONTROL
+            </button>
+
+        </section>
+
+
+        <!-- CHALLENGE ARENA -->
+        <section id="challenges" class="screen">
+
+            <h2>CHALLENGE ARENA</h2>
+
+            <div id="challengeContent"></div>
+
+        </section>
+
+
+        <!-- RESULTS -->
+        <section id="results" class="screen">
+
+            <h2>MASTERY REPORT</h2>
+
+            <div id="resultsContent"></div>
+
+        </section>
+
+
+        <!-- CACHEQUEST ADVENTURE WORLD -->
+        <section id="gameWorld" class="screen">
+
+            <div class="game-world-header">
+
+                <p>WELCOME TO CACHEQUEST</p>
+
+                <h1>THE MEMORY KINGDOM</h1>
+
+                <p>
+                    Explore five worlds. Complete missions. Become a Cache Master.
+                </p>
+
             </div>
 
-            <div class="card cache-line">
-                <h3>Cache Line 2</h3>
-                <p>Empty</p>
+
+            <!-- PLAYER PROGRESS -->
+            <div class="player-progress">
+
+                <h3>PLAYER PROGRESS</h3>
+
+                <p>XP: <span id="playerXP">0</span></p>
+
+                <p>Rank: <span id="playerRank">Rookie</span></p>
+
+                <p>
+                    Missions Completed:
+                    <span id="missionsCompleted">0</span>/5
+                </p>
+
+                <p>
+                    Lives:
+                    <span id="playerLives">❤️ ❤️ ❤️</span>
+                </p>
+
+            </div>
+            <!-- MEMORY MAZE GAME -->
+<div class="advanced-panel">
+
+    <p class="eyebrow">ADVENTURE MODE</p>
+    <h2>MEMORY MAZE</h2>
+
+    <div class="maze-stats">
+        <p>CRYSTALS: <span id="mazeScore">0 / 5</span></p>
+        <p>STATUS: <span id="mazeStatus">LEVEL 1 / 5</span></p>
+    </div>
+
+    <canvas id="mazeCanvas" width="800" height="600"></canvas>
+
+    <p id="mazeMessage">
+        Collect all five memory crystals and reach the exit!
+    </p>
+
+    <div class="maze-controls">
+        <button onclick="mazeMove(0,-1)">UP</button>
+        <button onclick="mazeMove(-1,0)">LEFT</button>
+        <button onclick="mazeMove(0,1)">DOWN</button>
+        <button onclick="mazeMove(1,0)">RIGHT</button>
+    </div>
+
+    <button onclick="restartMazeGame()">RESTART LEVEL</button>
+
+</div>
+
+
+            <!-- FIVE WORLDS -->
+            <div class="world-map">
+
+                <div class="world-card">
+                    <h2>01. MEMORY KINGDOM</h2>
+                    <p>
+                        Discover registers, cache, RAM and secondary storage.
+                    </p>
+                    <button onclick="startGameMission(0)">
+                        ENTER WORLD
+                    </button>
+                </div>
+
+                <div class="world-card">
+                    <h2>02. CACHE CITY</h2>
+                    <p>
+                        Master cache hits, misses and locality.
+                    </p>
+                    <button onclick="startGameMission(1)">
+                        ENTER WORLD
+                    </button>
+                </div>
+
+                <div class="world-card">
+                    <h2>03. ADDRESS LABYRINTH</h2>
+                    <p>
+                        Decode memory addresses and discover tag, index and offset.
+                    </p>
+                    <button onclick="startGameMission(2)">
+                        ENTER WORLD
+                    </button>
+                </div>
+
+                <div class="world-card">
+                    <h2>04. REPLACEMENT WAR</h2>
+                    <p>
+                        Explore Direct, Associative and Set Associative mapping.
+                    </p>
+                    <button onclick="startGameMission(3)">
+                        ENTER WORLD
+                    </button>
+                </div>
+
+                <div class="world-card">
+                    <h2>05. FINAL BOSS</h2>
+                    <p>
+                        Test your knowledge and prove your mastery.
+                    </p>
+                    <button onclick="startGameMission(4)">
+                        ENTER WORLD
+                    </button>
+                </div>
+
             </div>
 
-            <div class="card cache-line">
-                <h3>Cache Line 3</h3>
-                <p>Empty</p>
+
+            <!-- MISSION CONTENT -->
+            <div id="gameMissionContent"></div>
+
+
+            <!-- GAME OVER PANEL -->
+            <div id="gameOverPanel" class="advanced-panel" hidden>
+
+                <h2>GAME OVER</h2>
+
+                <p>
+                    You have lost all three lives.
+                    Try again to complete the mission.
+                </p>
+
+                <button onclick="restartMazeGame()">
+                    TRY AGAIN
+                </button>
+
+                <button onclick="openAdventureWorld()">
+                    BACK TO WORLD MAP
+                </button>
+
             </div>
-        </div>
-    </section>
 
-    <!-- MAPPING COMPARISON -->
-    <section id="comparison" class="container-fluid px-3 px-md-5 my-4">
-        <h2>Mapping Technique Comparison</h2>
 
-        <p>
-            Compare the performance of different cache mapping techniques
-            using the same memory block sequence.
-        </p>
+            <!-- LEVEL COMPLETE PANEL -->
+            <div id="levelCompletePanel" class="advanced-panel" hidden>
 
-        <button id="compareButton" onclick="compareMappings()">
-            Compare Techniques
-        </button>
+                <h2>LEVEL COMPLETED!</h2>
 
-        <div id="comparisonResults"></div>
-    </section>
+                <p>
+                    Congratulations! You completed this level.
+                </p>
 
-    <!-- PERFORMANCE CHART -->
-    <section id="performance" class="container-fluid px-3 px-md-5 my-4">
-        <h2>Cache Performance Analysis</h2>
+                <p>
+                    XP Earned: <span id="levelXP">0</span>
+                </p>
 
-        <p>
-            Visualize cache hits and misses through performance charts.
-        </p>
+                                NEXT LEVEL
+                <button onclick="nextMazeLevel()">
+    NEXT LEVEL
+</button>
+    
+                <button onclick="openAdventureWorld()">
+                    BACK TO WORLD MAP
+                </button>
 
-        <div class="card">
-            <canvas id="performanceChart"></canvas>
-        </div>
-    </section>
+            </div>
 
-    <!-- WORKED EXAMPLE -->
-    <section id="example" class="container-fluid px-3 px-md-5 my-4">
-        <h2>Worked Example – Direct Mapping</h2>
 
-        <p>Assume the cache contains 4 cache lines.</p>
-        <p>Memory blocks: 0, 4, 8</p>
+            <button onclick="showScreen('dashboard')">
+                BACK TO DASHBOARD
+            </button>
 
-        <p>
-            <b>Formula:</b>
-            Cache Line = Block Number % Number of Cache Lines
-        </p>
+        </section>
 
-        <table>
-            <tr>
-                <th>Memory Block</th>
-                <th>Calculation</th>
-                <th>Cache Line</th>
-            </tr>
+    </main>
 
-            <tr>
-                <td>0</td>
-                <td>0 % 4</td>
-                <td>0</td>
-            </tr>
 
-            <tr>
-                <td>4</td>
-                <td>4 % 4</td>
-                <td>0</td>
-            </tr>
-
-            <tr>
-                <td>8</td>
-                <td>8 % 4</td>
-                <td>0</td>
-            </tr>
-        </table>
-
-        <p>
-            <b>Observation:</b>
-            All three memory blocks map to cache line 0.
-            Therefore, they replace one another when accessed in sequence.
-        </p>
-    </section>
-
-    <!-- QUICK QUIZ -->
-    <section id="quiz" class="container-fluid px-3 px-md-5 my-4">
-        <h2>Quick Quiz</h2>
-
-        <p>
-            Which mapping allows a block to occupy any cache line?
-        </p>
-
-        <button onclick="checkAnswer('wrong')">Direct Mapping</button>
-
-        <button onclick="checkAnswer('correct')">Fully Associative</button>
-
-        <p id="quizResult"></p>
-    </section>
-
-    <!-- FOOTER -->
-    <footer>
-        <p>CacheScope | ECE 2002 - Module 5</p>
-        <p>Interactive Cache Memory & Mapping Simulator</p>
-    </footer>
-
-    <!-- BOOTSTRAP JAVASCRIPT -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- MAIN JAVASCRIPT -->
+    <!-- JAVASCRIPT FILES -->
+    <script src="quiz-data.js"></script>
+    <script src="cache-engine.js"></script>
     <script src="script.js"></script>
 
 </body>
