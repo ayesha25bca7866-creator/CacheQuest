@@ -92,13 +92,13 @@ const missions = [
 
 // LEARNING CENTER LESSON DATA
 
+
 const lessons = [
     {
         title: "01. Memory Hierarchy",
         explanation: `
             <h4>What is Memory Hierarchy?</h4>
             <p>Memory hierarchy is the arrangement of computer storage based on speed, cost and capacity.</p>
-
             <h4>Levels of Memory</h4>
             <ul>
                 <li>CPU Registers – Fastest storage.</li>
@@ -106,7 +106,6 @@ const lessons = [
                 <li>Main Memory (RAM) – Stores currently running programs and data.</li>
                 <li>Secondary Storage – Provides long-term storage.</li>
             </ul>
-
             <p>Generally, moving down the hierarchy increases capacity but decreases access speed.</p>
         `
     },
@@ -115,10 +114,8 @@ const lessons = [
         explanation: `
             <h4>What is Cache Memory?</h4>
             <p>Cache is a small, high-speed memory located close to the CPU.</p>
-
             <h4>Why is it used?</h4>
             <p>It stores frequently accessed instructions and data to reduce average memory access time.</p>
-
             <h4>Cache Levels</h4>
             <ul>
                 <li>L1 – Usually the smallest and fastest cache.</li>
@@ -132,10 +129,8 @@ const lessons = [
         explanation: `
             <h4>Cache Hit</h4>
             <p>A cache hit occurs when requested data is found in cache.</p>
-
             <h4>Cache Miss</h4>
             <p>A cache miss occurs when requested data is not found in cache.</p>
-
             <h4>Performance Formulas</h4>
             <p>Hit Ratio = Cache Hits / Total Memory Accesses</p>
             <p>Miss Ratio = Cache Misses / Total Memory Accesses</p>
@@ -147,17 +142,116 @@ const lessons = [
         explanation: `
             <h4>What is Locality?</h4>
             <p>Locality of reference means programs tend to access certain memory locations repeatedly or access nearby locations.</p>
-
             <h4>Types of Locality</h4>
             <ul>
                 <li>Temporal Locality – Recently accessed data may be accessed again.</li>
                 <li>Spatial Locality – Nearby memory locations may be accessed soon.</li>
             </ul>
-
             <p>Cache memory uses these principles to improve performance.</p>
+        `
+    },
+    {
+        title: "05. Direct Mapping",
+        explanation: `
+            <h4>What is Direct Mapping?</h4>
+            <p>Each main memory block can be stored in exactly one specific cache line.</p>
+
+            <h4>Formula</h4>
+            <p><strong>Cache Line = Memory Block Number % Number of Cache Lines</strong></p>
+
+            <h4>Worked Example</h4>
+            <p>Suppose the cache contains 4 lines and the requested memory block is 6.</p>
+            <p>6 % 4 = 2</p>
+            <p>Therefore, block 6 maps to cache line 2.</p>
+
+            <h4>Address Fields</h4>
+            <ul>
+                <li>Tag – Identifies which memory block is stored.</li>
+                <li>Index – Selects the cache line.</li>
+                <li>Block Offset – Selects a byte within the block.</li>
+            </ul>
+
+            <h4>Advantages</h4>
+            <ul>
+                <li>Simple hardware design.</li>
+                <li>Fast cache lookup.</li>
+            </ul>
+
+            <h4>Disadvantages</h4>
+            <ul>
+                <li>Blocks competing for the same line cause conflict misses.</li>
+                <li>Each block has only one possible cache location.</li>
+            </ul>
+        `
+    },
+    {
+        title: "06. Fully Associative Mapping",
+        explanation: `
+            <h4>What is Fully Associative Mapping?</h4>
+            <p>Any main memory block can be placed in any cache line.</p>
+
+            <h4>How it works</h4>
+            <ul>
+                <li>There is no fixed cache line for a memory block.</li>
+                <li>The cache compares the requested tag with stored tags.</li>
+                <li>If the cache is full, a replacement policy selects a block to remove.</li>
+            </ul>
+
+            <h4>Worked Example</h4>
+            <p>A cache contains 4 lines. Memory block 6 can be stored in line 0, 1, 2 or 3.</p>
+
+            <h4>Replacement Policies</h4>
+            <ul>
+                <li>LRU – Replaces the least recently used block.</li>
+                <li>FIFO – Replaces the block that entered first.</li>
+            </ul>
+
+            <h4>Advantages</h4>
+            <ul>
+                <li>Flexible block placement.</li>
+                <li>Can reduce conflict misses.</li>
+            </ul>
+
+            <h4>Disadvantages</h4>
+            <ul>
+                <li>More complex hardware.</li>
+                <li>Requires tag comparisons across cache lines.</li>
+            </ul>
+        `
+    },
+    {
+        title: "07. Set-Associative Mapping",
+        explanation: `
+            <h4>What is Set-Associative Mapping?</h4>
+            <p>It combines direct mapping and fully associative mapping. The cache is divided into sets, and each set contains a fixed number of lines called ways.</p>
+
+            <h4>Formula</h4>
+            <p><strong>Number of Sets = Total Cache Lines / Number of Ways</strong></p>
+            <p><strong>Set Number = Memory Block Number % Number of Sets</strong></p>
+
+            <h4>Worked Example</h4>
+            <p>A cache has 8 lines and is 2-way set associative.</p>
+            <p>Number of sets = 8 / 2 = 4.</p>
+            <p>For memory block 6:</p>
+            <p>Set number = 6 % 4 = 2.</p>
+            <p>Therefore, block 6 can occupy either way in set 2.</p>
+
+            <h4>Advantages</h4>
+            <ul>
+                <li>More flexible than direct mapping.</li>
+                <li>Usually less complex than fully associative mapping.</li>
+                <li>Can reduce conflict misses.</li>
+            </ul>
+
+            <h4>Disadvantages</h4>
+            <ul>
+                <li>More complex than direct mapping.</li>
+                <li>Requires replacement within a set when all its ways are occupied.</li>
+            </ul>
         `
     }
 ];
+
 
 
 // DISPLAY MISSION CARDS
@@ -944,173 +1038,6 @@ function compareCacheMappings() {
 }
 
 
-// =====================================================
-// 8. CHALLENGE ARENA
-// =====================================================
-
-let currentQuestionIndex = 0;
-let challengeScore = 0;
-let selectedAnswer = null;
-let answerSubmitted = false;
-
-function startChallenge() {
-
-    if (typeof quizData === "undefined" || !quizData.length) {
-        const container = document.getElementById("challengeContent");
-
-        if (container) {
-            container.innerHTML =
-                "<p>Quiz questions could not be loaded. Check quiz-data.js.</p>";
-        }
-
-        return;
-    }
-
-    currentQuestionIndex = 0;
-    challengeScore = 0;
-    selectedAnswer = null;
-    answerSubmitted = false;
-
-    showScreen("challenges");
-    displayQuestion();
-}
-
-function displayQuestion() {
-
-    const container = document.getElementById("challengeContent");
-
-    if (!container) return;
-
-    if (currentQuestionIndex >= quizData.length) {
-        showChallengeResults();
-        return;
-    }
-
-    const question = quizData[currentQuestionIndex];
-
-    selectedAnswer = null;
-    answerSubmitted = false;
-
-    container.innerHTML = `
-        <div class="challenge-card">
-            <p class="eyebrow">CACHEQUEST KNOWLEDGE TEST</p>
-
-            <h3>QUESTION ${currentQuestionIndex + 1} / ${quizData.length}</h3>
-
-            <div class="challenge-progress">Score: ${challengeScore}</div>
-
-            <h2>${question.question}</h2>
-
-            <div class="challenge-options">
-                ${question.options.map((option, index) => `
-                    <button
-                        class="challenge-option"
-                        data-answer="${index}"
-                        onclick="selectChallengeAnswer(${index})">
-                        ${String.fromCharCode(65 + index)}. ${option}
-                    </button>
-                `).join("")}
-            </div>
-
-            <div id="challengeFeedback"></div>
-
-            <button id="submitChallengeButton" onclick="submitChallengeAnswer()">
-                SUBMIT ANSWER
-            </button>
-
-            <button onclick="showScreen('dashboard')">
-                BACK TO MISSION CONTROL
-            </button>
-        </div>
-    `;
-}
-
-function selectChallengeAnswer(index) {
-
-    if (answerSubmitted) return;
-
-    selectedAnswer = index;
-
-    document.querySelectorAll(".challenge-option").forEach(button => {
-        button.classList.remove("selected");
-    });
-
-    const selected = document.querySelector(
-        `.challenge-option[data-answer="${index}"]`
-    );
-
-    if (selected) selected.classList.add("selected");
-}
-
-function submitChallengeAnswer() {
-
-    if (selectedAnswer === null) {
-        alert("Please select an answer first.");
-        return;
-    }
-
-    if (answerSubmitted) return;
-
-    answerSubmitted = true;
-
-    const question = quizData[currentQuestionIndex];
-    const correct = selectedAnswer === question.answer;
-
-    if (correct) challengeScore++;
-
-    const feedback = document.getElementById("challengeFeedback");
-
-    feedback.innerHTML = `
-        <div class="challenge-feedback">
-            <h3>${correct ? "CORRECT ANSWER!" : "INCORRECT ANSWER"}</h3>
-            <p>Correct Answer: ${question.options[question.answer]}</p>
-            <p>${question.explanation}</p>
-        </div>
-    `;
-
-    document.querySelectorAll(".challenge-option").forEach(button => {
-        button.disabled = true;
-    });
-
-    const submit = document.getElementById("submitChallengeButton");
-
-    submit.textContent = "NEXT QUESTION";
-    submit.onclick = nextChallengeQuestion;
-}
-
-function nextChallengeQuestion() {
-    currentQuestionIndex++;
-    displayQuestion();
-}
-
-function showChallengeResults() {
-
-    const container = document.getElementById("challengeContent");
-
-    if (!container) return;
-
-    const percentage = challengeScore / quizData.length * 100;
-
-    let performance = "ROOKIE PLAYER";
-
-    if (percentage >= 80) {
-        performance = "CACHE MASTER";
-    } else if (percentage >= 50) {
-        performance = "MEMORY EXPLORER";
-    }
-
-    container.innerHTML = `
-        <div class="challenge-results">
-            <p class="eyebrow">MISSION COMPLETED</p>
-            <h2>CHALLENGE RESULTS</h2>
-            <h1>${challengeScore} / ${quizData.length}</h1>
-            <h3>${percentage.toFixed(2)}% ACCURACY</h3>
-            <h2>${performance}</h2>
-            <button onclick="startChallenge()">PLAY AGAIN</button>
-            <button onclick="showScreen('dashboard')">BACK TO MISSION CONTROL</button>
-        </div>
-    `;
-}
 
 
 // =====================================================
@@ -1155,58 +1082,269 @@ function loadPlayerProgress(name) {
     renderMissions();
 }
 
+
 const gameMissions = [
     {
-        title: "THE MEMORY KINGDOM",
-        description: "Your journey begins! Learn how the memory hierarchy works.",
-        question: "Which memory is closest to the CPU?",
-        options: ["Hard Disk", "RAM", "Cache Memory", "DVD"],
-        answer: 2,
-        explanation: "Cache memory is located close to the CPU.",
-        reward: 100
+        title: "MISSION 1: THE MEMORY GATE",
+        description: "Understand memory hierarchy and the fundamentals of cache memory.",
+        reward: 100,
+        questions: [
+            {
+                question: "Which storage is closest to the CPU for immediate data access?",
+                options: ["Hard Disk", "Main Memory", "CPU Registers", "DVD"],
+                answer: 2,
+                explanation: "CPU registers are inside the processor and provide the fastest access."
+            },
+            {
+                question: "What is the main purpose of cache memory?",
+                options: [
+                    "To permanently store files",
+                    "To reduce average memory access time",
+                    "To replace the CPU",
+                    "To increase hard disk capacity"
+                ],
+                answer: 1,
+                explanation: "Cache stores frequently or recently used data so the CPU can access it faster."
+            },
+            {
+                question: "Which cache level is generally the smallest and fastest?",
+                options: ["L1 Cache", "L2 Cache", "L3 Cache", "Main Memory"],
+                answer: 0,
+                explanation: "L1 is generally the smallest and fastest cache level."
+            },
+            {
+                question: "What is a cache hit?",
+                options: [
+                    "Requested data is found in cache",
+                    "Requested data is deleted",
+                    "Cache becomes full",
+                    "Data is stored on a hard disk"
+                ],
+                answer: 0,
+                explanation: "A cache hit occurs when the requested data is already present in cache."
+            },
+            {
+                question: "Which principle explains why recently accessed data may be accessed again?",
+                options: [
+                    "Spatial locality",
+                    "Temporal locality",
+                    "Random access",
+                    "Sequential storage"
+                ],
+                answer: 1,
+                explanation: "Temporal locality means recently accessed data is likely to be accessed again."
+            }
+        ]
     },
+
     {
-        title: "CACHE CITY",
-        description: "Discover how cache hits and misses affect performance.",
-        question: "What happens when requested data is already in cache?",
-        options: ["Cache Miss", "Cache Hit", "Memory Failure", "Data Loss"],
-        answer: 1,
-        explanation: "A cache hit occurs when requested data is found in cache.",
-        reward: 150
+        title: "MISSION 2: DIRECT MAPPING",
+        description: "Master direct mapping, cache lines, indexes, tags and offsets.",
+        reward: 150,
+        questions: [
+            {
+                question: "In direct mapping, where can a particular memory block be placed?",
+                options: [
+                    "In any cache line",
+                    "Only in its assigned cache line",
+                    "Only in the last cache line",
+                    "In every cache line"
+                ],
+                answer: 1,
+                explanation: "Direct mapping assigns each memory block to exactly one possible cache line."
+            },
+            {
+                question: "A cache has 8 lines. Which line receives memory block 19?",
+                options: ["Line 1", "Line 2", "Line 3", "Line 4"],
+                answer: 2,
+                explanation: "Line index = block number mod number of lines = 19 mod 8 = 3."
+            },
+            {
+                question: "What is the purpose of the index field in direct mapping?",
+                options: [
+                    "To identify the cache line",
+                    "To identify the CPU",
+                    "To store the data value",
+                    "To calculate the miss penalty"
+                ],
+                answer: 0,
+                explanation: "The index selects the cache line where the block may be stored."
+            },
+            {
+                question: "What does the tag field help determine?",
+                options: [
+                    "The size of the CPU",
+                    "Whether the selected cache line contains the requested memory block",
+                    "The number of registers",
+                    "The clock speed"
+                ],
+                answer: 1,
+                explanation: "The stored tag is compared with the address tag to identify the correct block."
+            },
+            {
+                question: "Two frequently used blocks map to the same direct-mapped cache line. What problem can occur?",
+                options: [
+                    "Compulsory hit",
+                    "Conflict misses",
+                    "Higher cache capacity",
+                    "No replacement"
+                ],
+                answer: 1,
+                explanation: "Blocks competing for the same line can repeatedly replace one another, causing conflict misses."
+            }
+        ]
     },
+
     {
-        title: "ADDRESS LABYRINTH",
-        description: "Decode memory addresses and identify their fields.",
-        question: "Which field identifies a cache line in direct mapping?",
-        options: ["Tag", "Index", "Offset", "Data"],
-        answer: 1,
-        explanation: "The index selects the cache line in direct mapping.",
-        reward: 200
+        title: "MISSION 3: ASSOCIATIVE ARENA",
+        description: "Explore fully associative mapping and replacement policies.",
+        reward: 200,
+        questions: [
+            {
+                question: "In fully associative mapping, a memory block can be placed where?",
+                options: [
+                    "Only in line 0",
+                    "Only in one assigned line",
+                    "In any available cache line",
+                    "Only in the last line"
+                ],
+                answer: 2,
+                explanation: "Fully associative mapping allows a block to occupy any cache line."
+            },
+            {
+                question: "Which replacement policy removes the block that has not been used for the longest time?",
+                options: ["FIFO", "LRU", "Direct Mapping", "Random indexing"],
+                answer: 1,
+                explanation: "LRU means Least Recently Used. It replaces the block unused for the longest time."
+            },
+            {
+                question: "A cache uses FIFO. Which block is selected for replacement?",
+                options: [
+                    "The most recently loaded block",
+                    "The block loaded earliest",
+                    "The smallest block",
+                    "The block with the largest address"
+                ],
+                answer: 1,
+                explanation: "FIFO replaces the block that entered the cache first."
+            },
+            {
+                question: "A fully associative cache has 4 lines, all occupied. A new block arrives. What must happen?",
+                options: [
+                    "The cache creates a fifth line",
+                    "An existing block must be replaced",
+                    "The CPU stops permanently",
+                    "All blocks are deleted"
+                ],
+                answer: 1,
+                explanation: "When every line is occupied, a replacement policy selects a victim block."
+            },
+            {
+                question: "What is one major advantage of fully associative mapping?",
+                options: [
+                    "A block has only one possible line",
+                    "It eliminates all cache misses",
+                    "It provides flexible block placement",
+                    "It requires no tag comparison"
+                ],
+                answer: 2,
+                explanation: "A block can be placed in any cache line, reducing placement restrictions."
+            }
+        ]
     },
+
     {
-        title: "REPLACEMENT WAR",
-        description: "Explore cache replacement concepts.",
-        question: "Which policy replaces the least recently used block?",
-        options: ["FIFO", "LRU", "Direct Mapping", "AMAT"],
-        answer: 1,
-        explanation: "LRU replaces the block not accessed for the longest time.",
-        reward: 250
+        title: "MISSION 4: SET-ASSOCIATIVE MAZE",
+        description: "Understand sets, ways and set-associative address mapping.",
+        reward: 250,
+        questions: [
+            {
+                question: "A cache has 16 lines and is 4-way set associative. How many sets are there?",
+                options: ["2", "4", "8", "12"],
+                answer: 1,
+                explanation: "Number of sets = total cache lines / ways = 16 / 4 = 4."
+            },
+            {
+                question: "In a 2-way set-associative cache, how many blocks can each set hold?",
+                options: ["1", "2", "4", "8"],
+                answer: 1,
+                explanation: "Two-way means each set contains two cache lines."
+            },
+            {
+                question: "A cache has 8 sets. How many index bits are needed?",
+                options: ["2 bits", "3 bits", "4 bits", "8 bits"],
+                answer: 1,
+                explanation: "Index bits = log2(8) = 3."
+            },
+            {
+                question: "A cache has 4 sets. Memory block 13 maps to which set using modulo indexing?",
+                options: ["Set 0", "Set 1", "Set 2", "Set 3"],
+                answer: 1,
+                explanation: "Set index = 13 mod 4 = 1."
+            },
+            {
+                question: "In a set-associative cache, where can a memory block be placed?",
+                options: [
+                    "Anywhere in the entire cache",
+                    "Only in one fixed line",
+                    "In any line within its assigned set",
+                    "Only in main memory"
+                ],
+                answer: 2,
+                explanation: "A block maps to one set but can occupy any way within that set."
+            }
+        ]
     },
+
     {
-        title: "THE FINAL BOSS",
-        description: "Complete your final memory architecture examination.",
-        question: "What is the formula for AMAT?",
-        options: [
-            "Hit Time + (Miss Rate × Miss Penalty)",
-            "Hit Time × Miss Rate",
-            "Miss Rate + Cache Size",
-            "Cache Lines ÷ Memory Blocks"
-        ],
-        answer: 0,
-        explanation: "AMAT = Hit Time + (Miss Rate × Miss Penalty).",
-        reward: 500
+        title: "MISSION 5: THE FINAL BOSS",
+        description: "Apply cache concepts, calculations and performance analysis.",
+        reward: 300,
+        questions: [
+            {
+                question: "A cache has 90 hits and 10 misses. What is its hit ratio?",
+                options: ["10%", "50%", "90%", "100%"],
+                answer: 2,
+                explanation: "Hit ratio = hits / total accesses = 90 / 100 = 90%."
+            },
+            {
+                question: "A cache has a hit time of 2 ns, a miss rate of 0.1 and a miss penalty of 50 ns. What is AMAT?",
+                options: ["2 ns", "5 ns", "7 ns", "52 ns"],
+                answer: 2,
+                explanation: "AMAT = hit time + (miss rate × miss penalty) = 2 + (0.1 × 50) = 7 ns."
+            },
+            {
+                question: "Which mapping technique allows a memory block to occupy any cache line?",
+                options: [
+                    "Direct mapping",
+                    "Fully associative mapping",
+                    "Fixed direct mapping",
+                    "Sequential mapping"
+                ],
+                answer: 1,
+                explanation: "Fully associative mapping allows placement in any cache line."
+            },
+            {
+                question: "A cache has 32 lines and uses 4-way set associativity. How many sets does it contain?",
+                options: ["4", "8", "16", "28"],
+                answer: 1,
+                explanation: "Number of sets = 32 / 4 = 8."
+            },
+            {
+                question: "A program repeatedly accesses nearby memory addresses. Which principle can improve cache performance?",
+                options: [
+                    "Spatial locality",
+                    "FIFO replacement only",
+                    "Conflict misses",
+                    "Random placement"
+                ],
+                answer: 0,
+                explanation: "Spatial locality means nearby memory locations are likely to be accessed soon."
+            }
+        ]
     }
-    ];
+];
+
     
     function openDashboardMission(index) {
 
@@ -1296,124 +1434,257 @@ function updateGameProgress() {
         dashboardMastery.textContent =
             Math.round(completedMissions.length / 5 * 100) + "%";
     }
+        // Refresh Mission Control cards after progress changes
+    renderMissions();
 }
 
+ 
+let currentMissionIndex = 0;
+let missionCrystals = 0;
+let currentMissionQuestionIndex = 0;
+let missionAnswerLocked = false;
+let missionCompletedThisAttempt = false;
+
+
+// START A MISSION
 function startGameMission(index) {
 
-    if (
-        !Number.isInteger(index) ||
-        index < 0 ||
-        index >= gameMissions.length
-    ) return;
+    if (!gameMissions[index]) return;
+
+    if (completedMissions.includes(index)) {
+        alert("You have already completed this mission!");
+        return;
+    }
 
     if (index > 0 && !completedMissions.includes(index - 1)) {
         alert("Complete the previous mission first!");
         return;
     }
 
-    const mission = gameMissions[index];
-    const container = document.getElementById("gameMissionContent");
+    currentMissionIndex = index;
+    currentMissionQuestionIndex = 0;
+    missionCrystals = 0;
+    missionAnswerLocked = false;
+    missionCompletedThisAttempt = false;
 
-    if (!mission || !container) return;
+    showScreen("gameWorld");
+    displayMissionQuestion();
+}
 
-    container.innerHTML = `
+
+// DISPLAY THE CURRENT QUESTION
+function displayMissionQuestion() {
+
+    const mission = gameMissions[currentMissionIndex];
+    const questionData = mission.questions[currentMissionQuestionIndex];
+    const content = document.getElementById("gameMissionContent");
+
+    if (!content) {
+        console.error("gameMissionContent element not found!");
+        return;
+    }
+
+    missionAnswerLocked = false;
+
+    content.innerHTML = `
         <div class="mission-game-panel">
-            <p>MISSION ${index + 1} / 5</p>
+
             <h2>${mission.title}</h2>
+
             <p>${mission.description}</p>
-            <h3>${mission.question}</h3>
+
+            <div class="mission-progress">
+    ${Array.from({ length: 5 }, (_, i) => `
+        <span style="
+            display:inline-block;
+            font-size:25px;
+            margin:5px;
+            opacity:${i < missionCrystals ? "1" : "0.3"};
+        ">
+            💎
+        </span>
+    `).join("")}
+</div>
+
+            <div class="mission-progress">
+                ${mission.questions.map((q, i) => `
+                    <span style="
+                        display:inline-block;
+                        width:22px;
+                        height:22px;
+                        margin:4px;
+                        border-radius:50%;
+                        background:${i < currentMissionQuestionIndex ? '#16a34a' : i === currentMissionQuestionIndex ? '#38bdf8' : '#475569'};
+                    "></span>
+                `).join("")}
+            </div>
+
+            <h3>${questionData.question}</h3>
 
             <div class="game-options">
-                ${mission.options.map((option, i) => `
-                    <button class="game-answer"
-                        onclick="checkGameAnswer(${index}, ${i})">
-                        ${String.fromCharCode(65 + i)}. ${option}
+                ${questionData.options.map((option, i) => `
+                    <button
+                        class="game-answer"
+                        onclick="checkGameAnswer(${currentMissionIndex}, ${i})">
+                        ${option}
                     </button>
                 `).join("")}
             </div>
 
             <div id="gameFeedback"></div>
-            <button onclick="showScreen('dashboard')">EXIT MISSION</button>
+
         </div>
     `;
 }
 
+
+// CHECK THE ANSWER
 function checkGameAnswer(missionIndex, answerIndex) {
 
+    if (missionAnswerLocked) return;
+
+    if (missionIndex !== currentMissionIndex) return;
+
     const mission = gameMissions[missionIndex];
+    const questionData = mission.questions[currentMissionQuestionIndex];
+
     const feedback = document.getElementById("gameFeedback");
+    const buttons = document.querySelectorAll(".game-answer");
 
-    if (!mission || !feedback) return;
+    missionAnswerLocked = true;
 
-    if (completedMissions.includes(missionIndex)) {
-        feedback.innerHTML = "<h3>MISSION ALREADY COMPLETED</h3>";
-        return;
-    }
-
-    document.querySelectorAll(".game-answer").forEach(button => {
+    buttons.forEach(button => {
         button.disabled = true;
     });
 
-    if (answerIndex === mission.answer) {
+    if (answerIndex === questionData.answer) {
 
-        gameXP += mission.reward;
+        missionCrystals++;
 
-        completedMissions.push(missionIndex);
+const crystalDisplay = document.querySelector(".mission-progress");
 
-        feedback.innerHTML = `
-            <div class="game-feedback">
-                <h3>MISSION SUCCESSFUL!</h3>
-                <p>${mission.explanation}</p>
-                <h3>+${mission.reward} XP EARNED</h3>
-                <button onclick="finishGameMission()">CONTINUE</button>
-            </div>
+if (crystalDisplay) {
+    crystalDisplay.innerHTML = Array.from({ length: 5 }, (_, i) => `
+        <span style="
+            display:inline-block;
+            font-size:25px;
+            margin:5px;
+            opacity:${i < missionCrystals ? "1" : "0.3"};
+            filter:${i < missionCrystals ? "drop-shadow(0 0 8px gold)" : "none"};
+        ">💎</span>
+    `).join("");
+}feedback.innerHTML = `
+            <p style="color:#22c55e;">
+                CORRECT ANSWER!
+            </p>
+            <p>${questionData.explanation}</p>
+            <button onclick="nextMissionQuestion()">
+                ${currentMissionQuestionIndex === 4 ? "FINISH MISSION" : "NEXT QUESTION"}
+            </button>
         `;
 
     } else {
 
         feedback.innerHTML = `
-            <div class="game-feedback">
-                <h3>NOT QUITE! TRY AGAIN.</h3>
-                <p>${mission.explanation}</p>
-                <button onclick="retryGameMission(${missionIndex})">TRY AGAIN</button>
+            <p style="color:#ef4444;">
+                INCORRECT ANSWER!
+            </p>
+            <p>${questionData.explanation}</p>
+            <button onclick="retryMissionQuestion()">
+                TRY AGAIN
+            </button>
+        `;
+    }
+}
+
+
+// MOVE TO THE NEXT QUESTION
+function nextMissionQuestion() {
+
+    // Award one crystal for the correctly answered question
+    
+
+    if (currentMissionQuestionIndex < 4) {
+
+        currentMissionQuestionIndex++;
+        displayMissionQuestion();
+
+    } else {
+
+        finishGameMission();
+    }
+}
+
+
+// RETRY THE SAME QUESTION
+function retryMissionQuestion() {
+
+    displayMissionQuestion();
+}
+
+
+// RETRY THE MISSION
+function retryGameMission(index) {
+
+    startGameMission(index);
+}
+
+
+// COMPLETE THE MISSION
+function finishGameMission() {
+
+    if (missionCompletedThisAttempt) return;
+
+    missionCompletedThisAttempt = true;
+
+    const mission = gameMissions[currentMissionIndex];
+
+    if (!completedMissions.includes(currentMissionIndex)) {
+
+        completedMissions.push(currentMissionIndex);
+
+        gameXP += mission.reward;
+
+        localStorage.setItem(
+            "cacheQuestXP_" + playerKey,
+            gameXP
+        );
+
+        localStorage.setItem(
+            "cacheQuestCompleted_" + playerKey,
+            JSON.stringify(completedMissions)
+        );
+    }
+
+    updateGameProgress();
+
+    const content = document.getElementById("gameMissionContent");
+
+    if (content) {
+
+        content.innerHTML = `
+            <div class="mission-game-panel">
+
+                <h2 style="color:#22c55e;">
+                    MISSION COMPLETED!
+                </h2>
+
+                <h3>${mission.title}</h3>
+
+                <p>You answered all five questions correctly.</p>
+<p>💎 Crystals collected: ${missionCrystals} / 5</p>
+
+                <h3>Reward: ${mission.reward} XP</h3>
+
+                <button onclick="showScreen('dashboard')">
+                    BACK TO MISSION CONTROL
+                </button>
+
             </div>
         `;
     }
 
-    updateGameProgress();
-}
-
-function retryGameMission(index) {
-    startGameMission(index);
-}
-
-function finishGameMission() {
-
-    updateGameProgress();
-
-    const container = document.getElementById("gameMissionContent");
-
-    if (!container) return;
-
-    container.innerHTML = `
-        <div class="mission-game-panel">
-            <h2>MISSION COMPLETED!</h2>
-            <p>Your progress has been saved.</p>
-            <button onclick="startGameMission(Math.min(completedMissions.length, 4))">
-                NEXT MISSION
-            </button>
-            <button onclick="showScreen('gameWorld')">
-                RETURN TO WORLD MAP
-            </button>
-        </div>
-    `;
-
-    if (completedMissions.length === 5) {
-        container.innerHTML += `
-            <h2>YOU ARE A CACHEQUEST CHAMPION!</h2>
-            <p>You have completed all five worlds.</p>
-        `;
-    }
+    renderMissions();
 }
 
 
@@ -2223,64 +2494,7 @@ function completeMazeLevel() {
 // FINAL GAME COMPLETION
 // =====================================================
 
-function finishMazeGame() {
 
-    if (mazeGameCompleted) return;
-
-    mazeGameCompleted = true;
-    mazeRunning = false;
-    mazeWon = true;
-
-    stopMazeAnimation();
-
-    gameXP += 500;
-
-    localStorage.setItem("cacheQuestXP_" + playerKey, gameXP);
-    localStorage.setItem("cacheQuestMazeCompleted", "true");
-
-    updateGameProgress();
-
-    const gameOverPanel =
-        document.getElementById("gameOverPanel");
-
-    const levelPanel =
-        document.getElementById("levelCompletePanel");
-
-    if (gameOverPanel) gameOverPanel.hidden = true;
-    if (levelPanel) levelPanel.hidden = true;
-
-    const message =
-        document.getElementById("mazeMessage");
-
-    if (message) {
-        message.innerHTML = `
-            🏆 YOU SAVED THE MEMORY KINGDOM!
-            <br><br>
-            All five levels completed!
-            <br>
-            Final Maze Score: ${mazeScore}
-            <br>
-            Final Bonus: +500 XP
-            <br><br>
-            <button onclick="restartFullMazeGame()">
-                PLAY AGAIN
-            </button>
-            <button onclick="showScreen('dashboard')">
-                BACK TO DASHBOARD
-            </button>
-        `;
-    }
-
-    const status =
-        document.getElementById("mazeStatus");
-
-    if (status) status.textContent = "KINGDOM SAVED!";
-}
-
-
-// =====================================================
-// RESTART COMPLETE GAME
-// =====================================================
 
 function finishMazeGame() {
 
@@ -2425,4 +2639,4 @@ document.addEventListener("keydown", function (event) {
 
 updateGameProgress();
 renderMissions();
-drawMaze();
+drawMazeGame();
