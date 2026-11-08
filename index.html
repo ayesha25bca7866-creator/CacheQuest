@@ -100,9 +100,6 @@
         SIMULATION LAB
     </button>
 
-    <button class="dashboard-btn" onclick="startChallenge()">
-        CHALLENGE ARENA
-    </button>
 
     <button class="dashboard-btn" onclick="openAdventureWorld()">
         ENTER ADVENTURE WORLD
@@ -126,11 +123,22 @@
             <div class="learning-layout">
 
                 <aside class="topic-menu">
-                    <button onclick="loadLesson(0)">01. Memory Hierarchy</button>
-                    <button onclick="loadLesson(1)">02. Cache Basics</button>
-                    <button onclick="loadLesson(2)">03. Cache Hits & Misses</button>
-                    <button onclick="loadLesson(3)">04. Locality of Reference</button>
-                </aside>
+
+    <button onclick="loadLesson(0)">01. Memory Hierarchy</button>
+
+    <button onclick="loadLesson(1)">02. Cache Basics</button>
+
+    <button onclick="loadLesson(2)">03. Cache Hits & Misses</button>
+
+    <button onclick="loadLesson(3)">04. Locality of Reference</button>
+
+    <button onclick="loadLesson(4)">05. Direct Mapping</button>
+
+    <button onclick="loadLesson(5)">06. Fully Associative Mapping</button>
+
+    <button onclick="loadLesson(6)">07. Set-Associative Mapping</button>
+
+</aside>
 
                 <div id="learningContent" class="lesson-panel">
                     <h3>Welcome to the Learning Center</h3>
@@ -355,14 +363,6 @@
         </section>
 
 
-        <!-- CHALLENGE ARENA -->
-        <section id="challenges" class="screen">
-
-            <h2>CHALLENGE ARENA</h2>
-
-            <div id="challengeContent"></div>
-
-        </section>
 
 
         <!-- RESULTS -->
@@ -441,63 +441,44 @@
 
 
             <!-- FIVE WORLDS -->
-            <div class="world-map">
+            <!-- FIVE MISSION WORLDS -->
+<div class="world-map">
 
-                <div class="world-card">
-                    <h2>01. MEMORY KINGDOM</h2>
-                    <p>
-                        Discover registers, cache, RAM and secondary storage.
-                    </p>
-                    <button onclick="startGameMission(0)">
-                        ENTER WORLD
-                    </button>
-                </div>
+    <div class="world-card">
+        <h2>01. MEMORY GATE</h2>
+        <p>Learn memory hierarchy, cache basics, hits, misses and locality.</p>
+        <button onclick="startGameMission(0)">ENTER MISSION</button>
+    </div>
 
-                <div class="world-card">
-                    <h2>02. CACHE CITY</h2>
-                    <p>
-                        Master cache hits, misses and locality.
-                    </p>
-                    <button onclick="startGameMission(1)">
-                        ENTER WORLD
-                    </button>
-                </div>
+    <div class="world-card">
+        <h2>02. DIRECT MAPPING</h2>
+        <p>Master cache lines, block placement, tags, indexes and offsets.</p>
+        <button onclick="startGameMission(1)">ENTER MISSION</button>
+    </div>
 
-                <div class="world-card">
-                    <h2>03. ADDRESS LABYRINTH</h2>
-                    <p>
-                        Decode memory addresses and discover tag, index and offset.
-                    </p>
-                    <button onclick="startGameMission(2)">
-                        ENTER WORLD
-                    </button>
-                </div>
+    <div class="world-card">
+        <h2>03. ASSOCIATIVE ARENA</h2>
+        <p>Explore fully associative mapping, LRU and FIFO replacement.</p>
+        <button onclick="startGameMission(2)">ENTER MISSION</button>
+    </div>
 
-                <div class="world-card">
-                    <h2>04. REPLACEMENT WAR</h2>
-                    <p>
-                        Explore Direct, Associative and Set Associative mapping.
-                    </p>
-                    <button onclick="startGameMission(3)">
-                        ENTER WORLD
-                    </button>
-                </div>
+    <div class="world-card">
+        <h2>04. SET-ASSOCIATIVE MAZE</h2>
+        <p>Understand sets, ways, set indexes and replacement.</p>
+        <button onclick="startGameMission(3)">ENTER MISSION</button>
+    </div>
 
-                <div class="world-card">
-                    <h2>05. FINAL BOSS</h2>
-                    <p>
-                        Test your knowledge and prove your mastery.
-                    </p>
-                    <button onclick="startGameMission(4)">
-                        ENTER WORLD
-                    </button>
-                </div>
+    <div class="world-card">
+        <h2>05. FINAL BOSS</h2>
+        <p>Solve mixed cache problems, performance calculations and AMAT.</p>
+        <button onclick="startGameMission(4)">ENTER MISSION</button>
+    </div>
 
-            </div>
+</div>
 
-
+            
             <!-- MISSION CONTENT -->
-            <div id="gameMissionContent"></div>
+<div id="gameMissionContent"></div>
 
 
             <!-- GAME OVER PANEL -->
